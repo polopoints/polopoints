@@ -27,41 +27,41 @@ map<string, vector<string> > CBaseParams::m_mapMultiArgs;
 
 
 vector<string> intPubKey_mainNet = {
-		"0310b67015f3da33a250c8b13d4d62929a8f461d82554602dcafea8646eededb83",
-		"0323d31c961e16c5ef8a4ffecf0aa5de7c08a7698d4dc444153f5be9beb2059e41"
+		"03126e0a0439591f534b740c537e834dbe9165791e91a4c3356819afe68927a5c4",
+		"0213e48fe44a4defbb787925b446ab009f97d0df40d265fe6cdd550f5effb00d11"
 };
 
 vector<string> initPubKey_testNet = { //
-		"02e6505027f041a5fdb7525278af9b0dc923937dd3a1ccef54a46cf0c8de3f13b8",
-		"0316b1e536ea6a4a55574870788c84c35480c0490cb55740fdfcff1c5effccafea"
+		"03cb28d8ef31adcec6d46cdc43ba262d40e060e4e56a4e38454a620a3d7535ff45",
+		"031cf07d62eacaec073134cc8915462b623019594582d8e12d4a72aacab6ed553f"
 };
 
 vector<string> initPubkey_regTest = {
-		"02560c6add9c1bb177a766555660904e6052e57eb9a23472d92403e0e8180e102b",
-		"02f463d5423d3798ca7e4c9888aad7fc18b5f40e8c6bd26e2c620bf9f1479cae98",
-		"02a6b1f1f62d5f5078f0f5585b30c5c9e565ed4f052824739930c0fc2c0e09e212",
-		"0341d09e7c50a1406d8d63200fbb51babd89d133a361060f80c36be9eab4467c14",
-		"02ce125943ac355374cf019fe5c27686df562fdde291cd2dfcd92ab0e473235e22",
-		"02986782dd87dd857176e1092d30e8460684dc1fd9eb11fd23385488d54bdb8426",
-		"0275200bf4e88724af5111c7c956d174270a76dbe94827dbf4584afe3c357dab3e",
-		"02a4087370f17771c25cffae7fdcd72a95f5d6a65e699ab50f4e90e175f86fa7a7",
-		"02c87a55039723554b01405940c99853bdc6bdfc46ced225f9f91a61c541db38f6",
-		"03dea07cf50a82ee03cc3ed71b24a34685e5662756b07d671f70a0161a2df5a600",
-		"038bb7205aa82121a895668204f093f2f0ddec2a7027977af52832d0e34e2762ff",
+		"02a379d2952322467cadec13532f8c84e245308c64e98ae7781894dfea4a23565b",
+		"03f2c8334c4b72134dee31dfec101f4382745f7b578580586f33672c8c7b5ff401",
+		"022015008867f775d6c23ddea40c5d8edb3a026bb95bc5a1044899f7e9a056aa55",
+		"02c0d8d634c95d5018e4078b47c1280b2c7adfc1ea81a2803b4ce97aa08e7af6d4",
+		"02d99cf12c8b9c6c21bec7be6242c2df0584d9c335387362ec25cf5f70c7220713",
+		"02b30c8dff484fa4135690eb023296878d63adde3b884138022b8bd2b823b668ca",
+		"02347915e86c308c9b22d95b927738ef9bfc5b8f95a1ce18219d408b35ea1c01ad",
+		"0313de4fc40aba957dd6906677702d0bb9669903e8e30ce822e6ac09cdc04ef5e2",
+		"02b9a0c6b64e0ee184c8cc71247c129eb711889058b18d5413721e350ab4d9798c",
+		"02c268a9e093faf206fdb8fccb0166ed8e2a3c517dda238387972fa9c2b4e2694a",
+		"0384f1210579ee80e39335e28c61f115d1e621794cc40514818926421dd8b1b7c7",
 
-		"03b94cea2cea39f03254bc679ce368b293cf70245e1b4a3b0d1818a8136ab319ef",
-		"02ae43a2ef88414b1b1ab9a35493909930819512ef1f136bfbfc112d72ac404bc5",
-		"03bc72551eaff2090f892eae8a34b0c3857e1f375a94a6d6d01c547068fca2ae89",
-		"0207b9b3005236752cf287b7bfba82b0173f82361918fa0d61c3f76df174b21f17",
-		"0393848f4e1b6861cb569e76279cca0e1df121d3ae8ee16bc824209442d1485869",
-		"02af52880dace8ed9538bab40a7ab9fdfa5e87070575c70495f2c56ef9b732a536",
-		"032797a1e479c21d5296687844cf5e0b23e3bccc7fc698693afbd3f17cd88607a1",
-		"02104ec38c5305cbca08596113b3bb90bfd2bf907d42d823c463bbbc59e479984a",
-		"036fd8953b10c4fbd8380dede638b6fd1fd6b78d32b0f439b931968608b32093d6",
-		"025d4c4909576371d2d56bba46835d5f41455007a99ef89719b22e295f1e13141b"
+		"031a7bcbb24ca3239e46aeb09286d58bd5d4b9d7ed9b9d34436635752c448d8e71",
+		"031bfbdb36afda057833887ef70c8ba284f4c433d904d1f2cbad0beeb2e3406842",
+		"034768ef1eb0947df920fba2fcb26239a936764b4bfa8af8d2f867f83b304a6fde",
+		"037bb4f3cb86e771824dc495051420012ddf1a175945bd236e0f500ac0c29fb559",
+		"02679ebe70488b5f99cf7b60f545fcdb9bf93a142f8bc9fa3536de62840d5fd44b",
+		"02d4d2ea0a116f8561ff5b29097d6a477a07a931ea268a34b86fd842a5094903fd",
+		"02721aa4c535f8d3c99b8800add0c57b0541a19b7c82df94926b612ceac4269566",
+		"03437f94270206dffa7c419b3ff7be8b0aea315b2d42d5e3c00fdf494f0f994004",
+		"02ae1bd1280496decd58d629b0eb6691b98e99ffb052ed83f38f06cce3c6f5193a",
+		"0397c19fbc5e731566e10b6de25c153b5b1d2cb3b1c9bdf19e63928244fe7ef784"
 };
 unsigned int pnSeed[] = //
-		{0x8c841a78, 0x0a513778, 0x7fd3c865, 0x5d092a79, 0x55cc602a, 0x9a944c78};
+		{0x57b64c78, 0x04524a70, 0x7a3c818b, 0xa2fe387b, 0xbf11c48b, 0xb6481a78};
 
 class CMainParams: public CBaseParams {
 public:
@@ -71,12 +71,12 @@ public:
 // The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 // a large 4-byte int at any alignment.
 		pchMessageStart[0] = 0xff;
-		pchMessageStart[1] = 0xfe;
-		pchMessageStart[2] = 0x1C;
-		pchMessageStart[3] = 0x50;
-		vAlertPubKey =	ParseHex("03146e6f0d502bbd112bb5d8870834f8acb329a1a346968920d96399d10f658200");
-		nDefaultPort = 6668;
-		nRPCPort = 6669;
+		pchMessageStart[1] = 0xfd;
+		pchMessageStart[2] = 0x3a;
+		pchMessageStart[3] = 0x81;
+		vAlertPubKey =	ParseHex("0202c8293d5f2a17809849bee752bdf3fab5d271187bcaa60dbcfd0611220ddcb4");
+		nDefaultPort = 9996;
+		nRPCPort = 9969;
 		strDataDir = "main";
 		bnProofOfStakeLimit =~arith_uint256(0) >> 10;        //00 3f ff ff
 		nSubsidyHalvingInterval = 2590000;
@@ -86,29 +86,29 @@ public:
 		genesis.SetHashMerkleRoot(genesis.BuildMerkleTree());
 		genesis.SetHashPos(uint256());
 		genesis.SetVersion(1);
-		genesis.SetTime(1458906662);
+		genesis.SetTime(1460422800);
 		genesis.SetBits(0x1f3fffff);        //00 3f ff
-		genesis.SetNonce(888);
+		genesis.SetNonce(108);
 		genesis.SetFuelRate(INIT_FUEL_RATES);
 		genesis.SetHeight(0);
 		genesis.ClearSignature();
 		hashGenesisBlock = genesis.GetHash();
-		publicKey = "03146e6f0d502bbd112bb5d8870834f8acb329a1a346968920d96399d10f658200";
+		publicKey = "0202c8293d5f2a17809849bee752bdf3fab5d271187bcaa60dbcfd0611220ddcb4";
 //		{
 //			cout << "main hashGenesisBlock:\r\n" << hashGenesisBlock.ToString() << endl;
 //			cout << "main hashMerkleRoot:\r\n" << genesis.GetHashMerkleRoot().ToString() << endl;
 //		}
-		assert(hashGenesisBlock == uint256S("0x4f822175a56fcc9291c3bf1fc26b5c0f9e16fc445a51577083a82d3cb1de5c19"));
-		assert(genesis.GetHashMerkleRoot() == uint256S("0x0e706fffa5348d5e6384a6f08bd22641fdb665e3fe103538bfc285a1a2d64c34"));
+		assert(hashGenesisBlock == uint256S("0x5a6dd667b2e66ebd1f60468c110f10d35fad8bfbe8924308e4c5a9cf09724f94"));
+		assert(genesis.GetHashMerkleRoot() == uint256S("0x04cfb85732065544d2a6ce7b805bc5f51830618ef9e49d75c2f79ab47d9407e9"));
 
 //      vSeeds.push_back(CDNSSeedData("soypay.org.cn", "seed_cn_0.dspay.org"));
 //      vSeeds.push_back(CDNSSeedData("soypay.org.us", "seed_us_0.dspay.org"));
 
-        base58Prefixes[PUBKEY_ADDRESS] = {0x29};
-		base58Prefixes[SCRIPT_ADDRESS] = {8};
-		base58Prefixes[SECRET_KEY] = {138};
-		base58Prefixes[EXT_PUBLIC_KEY] = {0x05,0x86,0xC3,0x3D};
-		base58Prefixes[EXT_SECRET_KEY] = {0x05,0x85,0xA4,0x4F};
+        base58Prefixes[PUBKEY_ADDRESS] = {56};
+		base58Prefixes[SCRIPT_ADDRESS] = {33};
+		base58Prefixes[SECRET_KEY] = {130};
+		base58Prefixes[EXT_PUBLIC_KEY] = {0x06,0x96,0xA1,0x5C};
+		base58Prefixes[EXT_SECRET_KEY] = {0x06,0x96,0xC2,0x3D};
 
 		// Convert the pnSeeds array into usable address objects.
 		for (unsigned int i = 0; i < ARRAYLEN(pnSeed); i++) {
@@ -150,29 +150,25 @@ protected:
 	CBlock genesis;
 	vector<CAddress> vFixedSeeds;
 };
-//static CMainParams mainParams;
 
-//
-// Testnet (v3)
-//
 class CTestNetParams: public CMainParams {
 public:
 	CTestNetParams() {
 		// The message start string is designed to be unlikely to occur in normal data.
 		// The characters are rarely used upper ASCII, not valid as UTF-8, and produce
 		// a large 4-byte int at any alignment.
-        pchMessageStart[0] = 0xfe;
-        pchMessageStart[1] = 0x1d;
-        pchMessageStart[2] = 0xac;
-        pchMessageStart[3] = 0x20;
-		vAlertPubKey =	ParseHex("0393d16cb247643e713161e8ebeb5d61ca80f0b60db98bde0675cdaf23abb85e0a");
-		nDefaultPort = 16668;
-		nRPCPort = 16669;
+        pchMessageStart[0] = 0xff;
+        pchMessageStart[1] = 0xc1;
+        pchMessageStart[2] = 0x2d;
+        pchMessageStart[3] = 0x30;
+		vAlertPubKey =	ParseHex("038f8d1f93d1d779f1cdd2c21a4bec5186b3e0a34fdc8ef7b8ed97c7c119936387");
+		nDefaultPort = 13366;
+		nRPCPort = 13399;
 		strDataDir = "testnet";
-		publicKey = "0393d16cb247643e713161e8ebeb5d61ca80f0b60db98bde0675cdaf23abb85e0a";
+		publicKey = "038f8d1f93d1d779f1cdd2c21a4bec5186b3e0a34fdc8ef7b8ed97c7c119936387";
 		// Modify the testnet genesis block so the timestamp is valid for a later start.
-		genesis.SetTime(1457904215);
-		genesis.SetNonce(888);
+		genesis.SetTime(1459472400);
+		genesis.SetNonce(99);
 		genesis.vptx.clear();
 		assert(CreateGenesisRewardTx(genesis.vptx, initPubKey_testNet));
 		genesis.SetHashMerkleRoot(genesis.BuildMerkleTree());
@@ -183,12 +179,12 @@ public:
 //		{
 //			cout << "testnet hashGenesisBlock:\r\n" << hashGenesisBlock.ToString() << endl;
 //		}
-		assert(hashGenesisBlock == uint256S("0x6957e70aa4b2fb2d1c64b74a933b52f8730eb2628d9a0669c8037482e3544058"));
+		assert(hashGenesisBlock == uint256S("0x402d62f75dae509ed613c08534baab94c3cae9cece8c487b81928092fea7c04e"));
 //		vSeeds.clear();
 //		vSeeds.push_back(CDNSSeedData("bluematt.me", "testnet-seed.bluematt.me"));
 
-		base58Prefixes[PUBKEY_ADDRESS] = {100};
-		base58Prefixes[SCRIPT_ADDRESS] = {18};
+		base58Prefixes[PUBKEY_ADDRESS] = {118};
+		base58Prefixes[SCRIPT_ADDRESS] = {60};
 		base58Prefixes[SECRET_KEY]     = {108};
 		base58Prefixes[EXT_PUBLIC_KEY] = {0x05,0x85,0x88,0xAF};
 		base58Prefixes[EXT_SECRET_KEY] = {0x05,0x85,0x82,0xCA};
@@ -213,20 +209,20 @@ public:
 class CRegTestParams: public CTestNetParams {
 public:
 	CRegTestParams() {
-		pchMessageStart[0] = 0xf1;
-		pchMessageStart[1] = 0x1c;
-		pchMessageStart[2] = 0x3b;
-		pchMessageStart[3] = 0xc1;
+		pchMessageStart[0] = 0xfe;
+		pchMessageStart[1] = 0x32;
+		pchMessageStart[2] = 0x40;
+		pchMessageStart[3] = 0x53;
 		nSubsidyHalvingInterval = 500;
 		bnProofOfStakeLimit = ~arith_uint256(0) >> 6;     //target:00000011 11111111 11111111
-		genesis.SetTime(1457904215);
+		genesis.SetTime(1459472400);
 		genesis.SetBits(0x2003ffff);
-		genesis.SetNonce(888);
+		genesis.SetNonce(68);
 		genesis.vptx.clear();
 		assert(CreateGenesisRewardTx(genesis.vptx, initPubkey_regTest));
 		genesis.SetHashMerkleRoot(genesis.BuildMerkleTree());
 		hashGenesisBlock = genesis.GetHash();
-		nDefaultPort = 16666;
+		nDefaultPort = 13333;
 		nTargetSpacing = 20;
 		nTargetTimespan = 30 * 20;
 		strDataDir = "regtest";
@@ -237,7 +233,7 @@ public:
 //			cout << "regtest hashGenesisBlock:\r\n" << hashGenesisBlock.ToString() << endl;
 //			cout << "regtest hashMerkleRoot:\r\n" << genesis.hashMerkleRoot.ToString() << endl;
 //		}
-		assert(hashGenesisBlock == uint256S("0x7a54dd0298bbdc002f0f1664a6629e7b8f4a36c3c2b1b9be2755199a2c379452"));
+		assert(hashGenesisBlock == uint256S("0xd909978a7aefe7e22aac42110bb7e61452d961e9761d51a9e739859d326c2995"));
 
 		vFixedSeeds.clear();
 		vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
@@ -255,48 +251,6 @@ public:
 		return true;
 	}
 };
-//static CRegTestParams regTestParams;
-
-//static CBaseParams *pCurrentParams = &mainParams;
-
-//CBaseParams &Params() {
-//	return *pCurrentParams;
-//}
-
-//void SelectParams(CBaseParams::Network network) {
-//	switch (network) {
-//	case CBaseParams::MAIN:
-//		pCurrentParams = &mainParams;
-//		break;
-//	case CBaseParams::TESTNET:
-//		pCurrentParams = &testNetParams;
-//		break;
-//	case CBaseParams::REGTEST:
-//		pCurrentParams = &regTestParams;
-//		break;
-//	default:
-//		assert(false && "Unimplemented network");
-//		return;
-//	}
-//}
-
-//bool SelectParamsFromCommandLine() {
-//	bool fRegTest = GetBoolArg("-regtest", false);
-//	bool fTestNet = GetBoolArg("-testnet", false);
-//
-//	if (fTestNet && fRegTest) {
-//		return false;
-//	}
-//
-//	if (fRegTest) {
-//		SelectParams(CBaseParams::REGTEST);
-//	} else if (fTestNet) {
-//		SelectParams(CBaseParams::TESTNET);
-//	} else {
-//		SelectParams(CBaseParams::MAIN);
-//	}
-//	return true;
-//}
 
 /********************************************************************************/
 const vector<string> &CBaseParams::GetMultiArgs(const string& strArg) {
