@@ -12,7 +12,6 @@ autom4te.cache/
 config.log
 config.status
 configure
-autogen-polopoints-man.sh
 src/build-aux/
 src/stamp-h1
 share/setup.nsi
@@ -35,7 +34,7 @@ src/qt/test/moc*.cpp
 *.o-*
 *.patch
 .bitcoin
-*.a
+#*.a
 *.pb.cc
 *.pb.h
 
