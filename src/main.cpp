@@ -4739,17 +4739,15 @@ bool EraseBlockIndexFromSet(CBlockIndex *pIndex) {
 
 uint64_t GetBlockSubsidy(int nHeight)
 {
+	uint64_t nSubsidy = 10 * COIN;
+	uint64_t nFixedValue = 1.25 * COIN;
     int halvings = nHeight / SysCfg().GetSubsidyHalvingInterval();
-    // Force block reward to zero when right shift is undefined.
-    if (halvings >= 64)
-        return 0;
-
-    uint64_t nSubsidy = 10 * COIN;
-
-    // Subsidy is cut in half every 2,590,000 blocks which will occur approximately every 5 years.
-    nSubsidy >>= halvings;
-    if(nSubsidy < 1.25 * COIN) {
-    	nSubsidy = 1.25 * COIN;
+    // Force block reward to fixed value when right shift is undefined.
+    if (halvings > 3) {
+    	return nFixedValue;
+    }else {
+    	 // Subsidy is cut in half every 2,590,000 blocks which will occur approximately every 5 years.
+    	 nSubsidy >>= halvings;
     }
     return nSubsidy;
 }

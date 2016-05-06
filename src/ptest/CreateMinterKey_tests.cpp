@@ -42,7 +42,7 @@ using namespace boost;
 #include "CreateMinterKey_tests.h"
 
 
-const uint64_t sendMoney = 10000 * COIN;
+const uint64_t sendMoney = 2000 * COIN;
 bool CCreateMinerkey::SelectAccounts() {
 	const char *argv[] = { "rpctest", "listaddr"};
 	int argc = sizeof(argv) / sizeof(char*);
@@ -68,7 +68,7 @@ string CCreateMinerkey::GetOneAccount() {
 	for(auto &item : vAccount) {
 		if(GetBalance(item) > 1000000 * COIN) {
 			mapSendValue[item] += sendMoney;
-			if(mapSendValue[item] > 8000000 * COIN)
+			if(mapSendValue[item] > 20000000 * COIN)
 				continue;
 			return item;
 		}
@@ -84,7 +84,7 @@ void CCreateMinerkey::CreateAccount() {
 	if(!SelectAccounts())
 		return;
 	std::string TxHash("");
-	const int nNewAddrs = 1540;
+	const int nNewAddrs = 2000;
 	string hash = "";
 	vector<string> vNewAddress;
 //	string strAddress[] = {"0-1","0-2","0-3","0-4","0-5"};
