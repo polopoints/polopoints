@@ -98,8 +98,8 @@ public:
 //			cout << "main hashGenesisBlock:\r\n" << hashGenesisBlock.ToString() << endl;
 //			cout << "main hashMerkleRoot:\r\n" << genesis.GetHashMerkleRoot().ToString() << endl;
 //		}
-		assert(hashGenesisBlock == uint256S("0x5a6dd667b2e66ebd1f60468c110f10d35fad8bfbe8924308e4c5a9cf09724f94"));
-		assert(genesis.GetHashMerkleRoot() == uint256S("0x04cfb85732065544d2a6ce7b805bc5f51830618ef9e49d75c2f79ab47d9407e9"));
+		assert(hashGenesisBlock == uint256S("0x45722abbac3b9ebb4117baf18ed4b185b3b6f71b0283a22cc068a03ea39d6300"));
+		assert(genesis.GetHashMerkleRoot() == uint256S("0xb40bd867f975804cb175d960b754bce849395afc7540924213e4c3d790a50783"));
 
 //      vSeeds.push_back(CDNSSeedData("soypay.org.cn", "seed_cn_0.dspay.org"));
 //      vSeeds.push_back(CDNSSeedData("soypay.org.us", "seed_us_0.dspay.org"));
@@ -179,7 +179,7 @@ public:
 //		{
 //			cout << "testnet hashGenesisBlock:\r\n" << hashGenesisBlock.ToString() << endl;
 //		}
-		assert(hashGenesisBlock == uint256S("0x402d62f75dae509ed613c08534baab94c3cae9cece8c487b81928092fea7c04e"));
+		assert(hashGenesisBlock == uint256S("0x67a14df533764f0f6ef3bc1eefd787d283ee8acea15386c484f4e4acc9f6b2d7"));
 //		vSeeds.clear();
 //		vSeeds.push_back(CDNSSeedData("bluematt.me", "testnet-seed.bluematt.me"));
 
@@ -233,7 +233,7 @@ public:
 //			cout << "regtest hashGenesisBlock:\r\n" << hashGenesisBlock.ToString() << endl;
 //			cout << "regtest hashMerkleRoot:\r\n" << genesis.hashMerkleRoot.ToString() << endl;
 //		}
-		assert(hashGenesisBlock == uint256S("0xd909978a7aefe7e22aac42110bb7e61452d961e9761d51a9e739859d326c2995"));
+		assert(hashGenesisBlock == uint256S("0x89299bb7fb18674f2cbd75557f08c0cb80b70faa110abdd5f35bb87a775e29d2"));
 
 		vFixedSeeds.clear();
 		vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
@@ -428,11 +428,7 @@ bool CBaseParams::CreateGenesisRewardTx(vector<std::shared_ptr<CBaseTransaction>
 	for (int i = 0; i < length; ++i) {
 		int64_t money(0);
 		if (i > 0) {
-			if (length > 15) {   //regtest net
-				money = 1000000000 * COIN;
-			} else {
-				money = 10000000000 * COIN;
-			}
+			money = 500000000 * COIN;
 		}
 		shared_ptr<CRewardTransaction> pRewardTx = make_shared<CRewardTransaction>(ParseHex(vInitPubKey[i].c_str()),
 				money, 0);
