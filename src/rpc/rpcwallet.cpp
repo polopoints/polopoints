@@ -9,6 +9,7 @@
 #include "net.h"
 #include "netbase.h"
 #include "util.h"
+#include "miner.h"
 #include "../wallet/wallet.h"
 #include "../wallet/walletdb.h"
 
@@ -362,7 +363,7 @@ Value sendtoaddressraw(const Array& params, bool fHelp)
 		hight = params[4].get_int();
 	}
 
-	std::shared_ptr<CTransaction> tx = make_shared<CTransaction>(send,rev,Fee, nAmount,hight);
+	std::shared_ptr<CTransaction> tx = std::make_shared<CTransaction>(send,rev,Fee, nAmount,hight);
 	if (!pwalletMain->Sign(sendKeyId, tx->SignatureHash(), tx->signature)) {
 				throw JSONRPCError(RPC_INVALID_PARAMETER,  "Sign failed");
 	}
@@ -373,6 +374,430 @@ Value sendtoaddressraw(const Array& params, bool fHelp)
 	obj.push_back(Pair("rawtx", HexStr(ds.begin(), ds.end())));
 	return obj;
 
+}
+
+#pragma pack(1)
+typedef struct {
+	unsigned char systype;
+	unsigned char type;
+	unsigned char address[34];
+
+	IMPLEMENT_SERIALIZE
+	(
+		READWRITE(systype);
+		READWRITE(type);
+		for(unsigned int i = 0;i < 34;++i)
+			READWRITE(address[i]);
+	)
+}TRAN_USER;
+#pragma pack()
+
+Value notionalpoolingasset(const Array& params, bool fHelp)
+{
+	if(fHelp || params.size() < 2)
+	{
+		throw runtime_error(
+				 "notionalpoolingasset \"scriptid\" \"recvaddress\"\n"
+				 "\nThe collection of all assets\n"
+				 "\nArguments:\n"
+				 "1.\"scriptid\": (string, required)\n"
+				 "2.\"recvaddress\"  (string, required) The Popcoin address to receive.\n"
+				 "3.\"amount\" (number optional)\n"
+				 "\nResult:\n"
+				 "\nExamples:\n"
+				 + HelpExampleCli("notionalpoolingasset", "11-1 pPKAiv9v4EaKjZGg7yWqnFJbhdZLVLyX8N 10")
+				 + HelpExampleRpc("notionalpoolingasset", "11-1 pPKAiv9v4EaKjZGg7yWqnFJbhdZLVLyX8N 10"));
+	}
+	EnsureWalletIsUnlocked();
+	CRegID regid(params[0].get_str());
+	if (regid.IsEmpty() == true) {
+		throw runtime_error("in notionalpoolingasset :scriptid size is error!\n");
+	}
+
+	if (!pScriptDBTip->HaveScript(regid)) {
+		throw runtime_error("in notionalpoolingasset :scriptid  is not exist!\n");
+	}
+
+	int64_t nAmount = 10 * COIN;
+	if(3 == params.size())
+		nAmount = params[2].get_real() * COIN;
+
+	CKeyID RevKeyId;
+
+	auto GetKeyId = [](string const &addr,CKeyID &KeyId) {
+		if (!CRegID::GetKeyID(addr, KeyId)) {
+			KeyId=CKeyID(addr);
+			if (KeyId.IsEmpty())
+			return false;
+		}
+		return true;
+	};
+
+	Object retObj;
+	string strRevAddr = params[1].get_str();
+	if (!GetKeyId(strRevAddr, RevKeyId)) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "to address Invalid  ");
+	}
+
+	if(!pwalletMain->HaveKey(RevKeyId)) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "to address Invalid  ");
+	}
+
+	set<CKeyID> sKeyid;
+	pwalletMain->GetKeys(sKeyid);
+	if(sKeyid.empty())
+	{
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No Key In wallet \n");
+	}
+	set<CKeyID> sResultKeyid;
+	for (auto &te : sKeyid) {
+		if(te.ToString() == RevKeyId.ToString())
+			continue;
+		if (pAccountViewTip->GetRawBalance(te) >= nAmount)
+			sResultKeyid.insert(te);
+	}
+
+	set<CKeyID>::iterator it;
+	CKeyID sendKeyId;
+	Array arrayTxIds;
+
+	CUserID rev;
+	CRegID revreg;
+
+	for(it=sResultKeyid.begin();it!=sResultKeyid.end();it++)
+	{
+	    sendKeyId = *it;
+
+	    if (sendKeyId.IsNull()) {
+	    	continue;
+	    }
+
+	    CRegID sendreg;
+    	if (!pAccountViewTip->GetRegId(CUserID(sendKeyId), sendreg)) {
+    		continue;
+    	}
+
+    	TRAN_USER tu;
+    	memset(&tu, 0, sizeof(TRAN_USER));
+    	tu.systype = 0xff;
+    	tu.type = 0x03;
+    	memcpy(&tu.address, strRevAddr.c_str(), 34);
+
+		CDataStream scriptData(SER_DISK, CLIENT_VERSION);
+		scriptData << tu;
+		string sendcontract = HexStr(scriptData);
+
+		LogPrint("vm", "sendcontract=%s\n",sendcontract.c_str());
+
+		vector_unsigned_char pContract;
+		pContract = ParseHex(sendcontract);
+
+		int nFuelRate = GetElementForBurn(chainActive.Tip());
+		const int STEP = 645;
+
+		int64_t nFee = (STEP / 100 + 1) * nFuelRate + SysCfg().GetTxFee();
+
+		LogPrint("vm", "nFuelRate=%d, nFee=%lld\n",nFuelRate, nFee);
+
+    	CTransaction tx(sendreg, regid, nFee, 0 , chainActive.Height(), pContract);
+
+    	if (!pwalletMain->Sign(sendKeyId, tx.SignatureHash(), tx.signature)) {
+    		continue;
+    	}
+
+    	std::tuple<bool,string> ret = pwalletMain->CommitTransaction((CBaseTransaction *) &tx);
+    	if(!std::get<0>(ret))
+    		 continue;
+    	arrayTxIds.push_back(std::get<1>(ret));
+	}
+
+	retObj.push_back(Pair("Tx", arrayTxIds));
+
+	return retObj;
+}
+
+Value getassets(const Array& params, bool fHelp)
+{
+	if(fHelp || params.size() < 1)
+	{
+		throw runtime_error(
+				 "getassets \"scriptid\"\n"
+				 "\nThe collection of all assets\n"
+				 "\nArguments:\n"
+				 "1.\"scriptid\": (string, required)\n"
+				 "\nResult:\n"
+				 "\nExamples:\n"
+				 + HelpExampleCli("getassets", "11-1")
+				 + HelpExampleRpc("getassets", "11-1"));
+	}
+
+	CRegID regid(params[0].get_str());
+	if (regid.IsEmpty() == true) {
+		throw runtime_error("in getassets :scriptid size is error!\n");
+	}
+
+	if (!pScriptDBTip->HaveScript(regid)) {
+		throw runtime_error("in getassets :scriptid  is not exist!\n");
+	}
+
+
+	Object retObj;
+
+	set<CKeyID> sKeyid;
+	pwalletMain->GetKeys(sKeyid);
+	if(sKeyid.empty())
+	{
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No Key In wallet \n");
+	}
+
+	uint64_t totalassets = 0;
+	Array arrayAssetIds;
+	set<CKeyID>::iterator it;
+	for(it=sKeyid.begin();it!=sKeyid.end();it++)
+	{
+		CKeyID KeyId = *it;
+
+	    if (KeyId.IsNull()) {
+	    	continue;
+	    }
+
+	    vector<unsigned char> veckey;
+		string addr = KeyId.ToAddress();
+		veckey.assign(addr.c_str(), addr.c_str() + addr.length());
+
+		std::shared_ptr<CAppUserAccout> temp = make_shared<CAppUserAccout>();
+		if (!pScriptDBTip->GetScriptAcc(regid, veckey, *temp.get())) {
+			continue;
+		}
+
+		temp.get()->AutoMergeFreezeToFree(chainActive.Tip()->nHeight);
+		uint64_t freeValues = temp.get()->getllValues();
+		uint64_t freezeValues = temp.get()->GetAllFreezedValues();
+		totalassets += freeValues;
+		totalassets += freezeValues;
+
+		Object result;
+		result.push_back(Pair("Address", addr));
+		result.push_back(Pair("FreeValues", freeValues));
+		result.push_back(Pair("FreezedFund", freezeValues));
+
+		arrayAssetIds.push_back(result);
+	}
+
+	retObj.push_back(Pair("TotalAssets", totalassets));
+	retObj.push_back(Pair("Lists", arrayAssetIds));
+
+	return retObj;
+}
+
+Value notionalpoolingbalance(const Array& params, bool fHelp)
+{
+	int size = params.size();
+	if (fHelp || (size != 2))
+		throw runtime_error(
+						"notionalpoolingbalance  \"receive address\" \"amount\"\n"
+						"\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n"
+						+ HelpRequiringPassphrase() + "\nArguments:\n"
+						"1. receive address   (string, required) The Koala address to receive\n"
+						"2. amount (required)\n"
+						"3.\"description\"   (string, required) \n"
+						"\nResult:\n"
+						"\"transactionid\"  (string) The transaction id.\n"
+						"\nExamples:\n"
+						+ HelpExampleCli("notionalpoolingbalance", "\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" 0.1")
+						+ HelpExampleRpc("notionalpoolingbalance",
+						"\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\", 0.1, \"donation\", \"seans outpost\""));
+	EnsureWalletIsUnlocked();
+	CKeyID sendKeyId;
+	CKeyID RevKeyId;
+
+	auto GetKeyId = [](string const &addr,CKeyID &KeyId) {
+		if (!CRegID::GetKeyID(addr, KeyId)) {
+			KeyId=CKeyID(addr);
+			if (KeyId.IsEmpty())
+			return false;
+		}
+		return true;
+	};
+
+	// Amount
+	Object retObj;
+	int64_t nAmount = 0;
+	CRegID sendreg;
+	//// from address to address
+
+	if (!GetKeyId(params[0].get_str(), RevKeyId)) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "to address Invalid  ");
+	}
+
+	if(!pwalletMain->HaveKey(RevKeyId)) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "to address Invalid  ");
+	}
+
+	nAmount = params[1].get_real() * COIN;
+	if(nAmount <= SysCfg().GetTxFee())
+		nAmount = 0.01 * COIN;
+	set<CKeyID> sKeyid;
+	sKeyid.clear();
+	pwalletMain->GetKeys(sKeyid); //get addrs
+	if(sKeyid.empty())
+	{
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No Key In wallet \n");
+	}
+	set<CKeyID> sResultKeyid;
+	for (auto &te : sKeyid) {
+		if(te.ToString() == RevKeyId.ToString())
+			continue;
+		if (pAccountViewTip->GetRawBalance(te) >= nAmount) {
+			if (pAccountViewTip->GetRegId(CUserID(te), sendreg)) {
+				sResultKeyid.insert(te);
+			}
+		}
+	}
+
+	Array arrayTxIds;
+    set<CKeyID>::iterator it;
+
+    for(it=sResultKeyid.begin();it!=sResultKeyid.end();it++)
+    {
+    	sendKeyId = *it;
+
+    	if (sendKeyId.IsNull()) {
+    		continue;
+    	}
+
+
+    	CRegID revreg;
+    	CUserID rev;
+
+    	if (!pAccountViewTip->GetRegId(CUserID(sendKeyId), sendreg)) {
+    		continue;
+    	}
+
+    	if (pAccountViewTip->GetRegId(CUserID(RevKeyId), revreg)) {
+    		rev = revreg;
+    	} else {
+    		rev = RevKeyId;
+    	}
+
+    	CTransaction tx(sendreg, rev, SysCfg().GetTxFee(), pAccountViewTip->GetRawBalance(sendreg) - SysCfg().GetTxFee() , chainActive.Height());
+
+    	if (!pwalletMain->Sign(sendKeyId, tx.SignatureHash(), tx.signature)) {
+    		continue;
+    	}
+
+    	std::tuple<bool,string> ret = pwalletMain->CommitTransaction((CBaseTransaction *) &tx);
+    	if(!std::get<0>(ret))
+    		 continue;
+    	arrayTxIds.push_back(std::get<1>(ret));
+    }
+
+    retObj.push_back(Pair("Tx", arrayTxIds));
+
+	return retObj;
+}
+Value dispersebalance(const Array& params, bool fHelp)
+{
+	int size = params.size();
+	if (fHelp || (size != 2))
+		throw runtime_error(
+						"dispersebalance  \"send address\" \"amount\"\n"
+						"\nSend an amount to a address list. \n"
+						+ HelpRequiringPassphrase() + "\nArguments:\n"
+						"1. send address   (string, required) The Koala address to receive\n"
+						"2. amount (required)\n"
+						"3.\"description\"   (string, required) \n"
+						"\nResult:\n"
+						"\"transactionid\"  (string) The transaction id.\n"
+						"\nExamples:\n"
+						+ HelpExampleCli("dispersebalance", "\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\" 0.1")
+						+ HelpExampleRpc("dispersebalance",
+						"\"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\", 0.1"));
+	EnsureWalletIsUnlocked();
+
+	CKeyID sendKeyId;
+
+	auto GetKeyId = [](string const &addr,CKeyID &KeyId) {
+		if (!CRegID::GetKeyID(addr, KeyId)) {
+			KeyId=CKeyID(addr);
+			if (KeyId.IsEmpty())
+			return false;
+		}
+		return true;
+	};
+
+	if (!GetKeyId(params[0].get_str(), sendKeyId)) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "send address Invalid  ");
+	}
+
+	if(!pwalletMain->HaveKey(sendKeyId)) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "send address Invalid  ");
+	}
+
+	CRegID sendreg;
+
+	if (!pAccountViewTip->GetRegId(CUserID(sendKeyId), sendreg)) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "send address not activated  ");
+	}
+
+	int64_t nAmount = 0;
+	nAmount = params[1].get_real() * COIN;
+	if(nAmount <= 0) {
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "nAmount <= 0  ");
+	}
+
+	set<CKeyID> sKeyid;
+	pwalletMain->GetKeys(sKeyid); //get addrs
+	if(sKeyid.empty())
+	{
+		throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No Key In wallet \n");
+	}
+
+	Array arrayTxIds;
+	Object retObj;
+    set<CKeyID>::iterator it;
+    CKeyID RevKeyId;
+
+    for(it=sKeyid.begin();it!=sKeyid.end();it++)
+    {
+    	RevKeyId = *it;
+
+    	if (RevKeyId.IsNull()) {
+    		continue;
+    	}
+
+    	if(sendKeyId.ToString() == RevKeyId.ToString())
+    		continue;
+
+    	CRegID revreg;
+    	CUserID rev;
+
+    	if (pAccountViewTip->GetRegId(CUserID(RevKeyId), revreg)) {
+    		rev = revreg;
+    	} else {
+    		rev = RevKeyId;
+    	}
+
+    	if(pAccountViewTip->GetRawBalance(sendreg) < nAmount + SysCfg().GetTxFee())
+    	{
+    		break;
+    	}
+
+    	CTransaction tx(sendreg, rev, SysCfg().GetTxFee(), nAmount , chainActive.Height());
+
+    	if (!pwalletMain->Sign(sendKeyId, tx.SignatureHash(), tx.signature)) {
+    		continue;
+    	}
+
+    	std::tuple<bool,string> ret = pwalletMain->CommitTransaction((CBaseTransaction *) &tx);
+    	if(!std::get<0>(ret))
+    		 continue;
+    	arrayTxIds.push_back(std::get<1>(ret));
+    }
+
+    retObj.push_back(Pair("Tx", arrayTxIds));
+
+	return retObj;
 }
 
 Value sendtoaddress(const Array& params, bool fHelp)

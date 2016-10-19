@@ -46,6 +46,14 @@ class CVmRunEvn {
 	 * the block height
 	 */
 	unsigned int RunTimeHeight;
+	/**
+	 * vm before the app account state
+	 */
+	vector<shared_ptr<CAppUserAccout>> RawAppUserAccout;
+	/**
+	 * vm operate the app account  state
+	 */
+	vector<shared_ptr<CAppUserAccout>> NewAppUserAccout;
 	CScriptDBViewCache *m_ScriptDBTip;
 	CAccountViewCache *m_view;
 	vector<CVmOperate> m_output;   //保存操作结果
@@ -97,7 +105,7 @@ private:
 	vector_unsigned_char GetAccountID(CVmOperate value);
 //	bool IsSignatureAccount(CRegID account);
 	bool OpeatorAppAccount(const map<vector<unsigned char >,vector<CAppFundOperate> > opMap, CScriptDBViewCache& view);
-
+	std::shared_ptr<CAppUserAccout> GetAppAccount(shared_ptr<CAppUserAccout>& AppAccount);
 public:
 	/**
 	 * A constructor.
@@ -113,6 +121,9 @@ public:
 	 * @return :the variable NewAccont
 	 */
 	vector<shared_ptr<CAccount> > &GetNewAccont();
+	vector<shared_ptr<CAppUserAccout>> &GetRawAppUserAccount();
+
+	vector<shared_ptr<CAppUserAccout>> &GetNewAppUserAccount();
 	/**
 	 * @brief  start to run the script
 	 * @param Tx: run the tx

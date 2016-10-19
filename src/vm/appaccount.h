@@ -183,6 +183,7 @@ public:
 		mAccUserID = accUserId;
 	}
 
+	uint64_t GetAllFreezedValues();
 	IMPLEMENT_SERIALIZE
 	(
 		READWRITE(VARINT(llValues));

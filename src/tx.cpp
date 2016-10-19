@@ -15,6 +15,22 @@
 #include "json/json_spirit_writer_template.h"
 using namespace json_spirit;
 
+static bool GetKeyId(const CAccountViewCache &view, const vector<unsigned char> &ret,
+		CKeyID &KeyId) {
+	if (ret.size() == 6) {
+		CRegID reg(ret);
+		KeyId = reg.getKeyID(view);
+	} else if (ret.size() == 34) {
+		string addr(ret.begin(), ret.end());
+		KeyId = CKeyID(addr);
+	}else{
+		return false;
+	}
+	if (KeyId.IsEmpty())
+		return false;
+
+	return true;
+}
 
 bool CID::Set(const CRegID &id) {
 	CDataStream ds(SER_DISK, CLIENT_VERSION);
@@ -500,6 +516,14 @@ bool CTransaction::ExecuteTx(int nIndex, CAccountViewCache &view, CValidationSta
 			txundo.vAccountLog.push_back(oldAcctLog);
 		}
 		txundo.vScriptOperLog.insert(txundo.vScriptOperLog.end(), vmRunEvn.GetDbLog()->begin(), vmRunEvn.GetDbLog()->end());
+		vector<std::shared_ptr<CAppUserAccout> > &vAppUserAccount = vmRunEvn.GetRawAppUserAccount();
+		for (auto & itemUserAccount : vAppUserAccount) {
+			CKeyID itemKeyID;
+			bool bValid = GetKeyId(view, itemUserAccount.get()->getaccUserId(), itemKeyID);
+			if(bValid) {
+				vAddress.insert(itemKeyID);
+			}
+		}
 		if(!scriptDB.SetTxRelAccout(GetHash(), vAddress))
 				return ERRORMSG("ExecuteTx() : ContractTransaction ExecuteTx, save tx relate account info to script db error");
 
@@ -554,6 +578,14 @@ bool CTransaction::GetAddress(set<CKeyID> &vAddr, CAccountViewCache &view, CScri
 
 			for (auto & item : vpAccount) {
 				vAddr.insert(item->keyID);
+			}
+			vector<std::shared_ptr<CAppUserAccout> > &vAppUserAccount = vmRunEvn.GetRawAppUserAccount();
+			for (auto & itemUserAccount : vAppUserAccount) {
+				CKeyID itemKeyID;
+				bool bValid = GetKeyId(view, itemUserAccount.get()->getaccUserId(), itemKeyID);
+				if(bValid) {
+					vAddr.insert(itemKeyID);
+				}
 			}
 		} else {
 			set<CKeyID> vTxRelAccount;

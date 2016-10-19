@@ -239,7 +239,7 @@ static const CRPCCommand vRPCCommands[] =
     { "getnettotals",           &getnettotals,           true,      true,       false },
     { "getpeerinfo",            &getpeerinfo,            true,      false,      false },
     { "ping",                   &ping,                   true,      false,      false },
-    { "getpolopointsstate",          &getpolopointsstate,          false,      false,      false }, //true
+    { "getpolopointsstate",     &getpolopointsstate,          false,      false,      false }, //true
 
     /* Block chain and UTXO */
     { "getblockchaininfo",      &getblockchaininfo,      true,      false,      false },
@@ -291,6 +291,7 @@ static const CRPCCommand vRPCCommands[] =
 	{ "walletpassphrase",       &walletpassphrase,       true,      false,      true },
 	{ "setgenerate",            &setgenerate,            true,      true,       false},
 	{ "listapp",                &listapp,                true,      false,      true },
+	{ "getappinfo",             &getappinfo,             true,      false,      true },
 	{ "generateblock",          &generateblock, 		 true,      true,       true },
 	{ "listtxcache",            &listtxcache,            true,      false,      true },
 	{ "getscriptdata",          &getscriptdata,          true,      false,      true },
@@ -299,7 +300,10 @@ static const CRPCCommand vRPCCommands[] =
 	{ "sendtoaddress",          &sendtoaddress,          false,     false,      true },
 	{ "sendtoaddresswithfee",   &sendtoaddresswithfee,   false,     false,      true },
     { "getbalance",             &getbalance,             false,     false,      true },
-
+    { "notionalpoolingbalance", &notionalpoolingbalance, false,     false,      true },
+    { "dispersebalance", 		&dispersebalance, 		 false,     false,      true },
+    { "notionalpoolingasset", 	&notionalpoolingasset, 	 false,     false,      true },
+    { "getassets", 				&getassets, 	 		 false,     false,      true },
     { "submittx",      			&submittx,       	 	 true,      false,      false},
 
     { "sigstr",    				&sigstr,    			 true,      false,      true },

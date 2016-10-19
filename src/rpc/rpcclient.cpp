@@ -234,7 +234,11 @@ Array RPCConvertValues(const string &strMethod, const vector<string> &strParams)
     if (strMethod == "registerscripttxraw"          && n > 2)ConvertTo<bool>(params[2]);
     if (strMethod == "registerscripttxraw"          && n > 4) ConvertTo<int>(params[4]);
     if (strMethod == "gettxhashbyaddress"          && n > 1) ConvertTo<int>(params[1]);
-
+    if (strMethod == "listtx"          			   && n > 0) ConvertTo<int>(params[0]);
+    if (strMethod == "listtx"                      && n > 1) ConvertTo<int>(params[1]);
+	if (strMethod == "notionalpoolingbalance" && n > 1) ConvertTo<double>(params[1]);
+	if (strMethod == "dispersebalance"        && n > 1) ConvertTo<double>(params[1]);
+	if (strMethod == "notionalpoolingasset" && n > 2) ConvertTo<double>(params[2]);
     return params;
 }
 
